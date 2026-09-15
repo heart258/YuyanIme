@@ -8,5 +8,6 @@ captures/
 .idea/
 *.jks
 keystore/keystore.properties
+keystore/
 /.kotlin
 *.log
