@@ -1,21 +1,30 @@
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Properties
+import java.util.TimeZone
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
 }
 
-fun versionCodeDate(): String =
-    java.text.SimpleDateFormat("yyyyMMddHH", java.util.TimeZone.getTimeZone("GMT+8")).format(java.util.Date())
+fun versionCodeDate(): String {
+    val fmt = SimpleDateFormat("yyyyMMddHH").apply { timeZone = TimeZone.getTimeZone("GMT+8") }
+    return fmt.format(Date())
+}
 
-fun versionNameDate(): String =
-    java.text.SimpleDateFormat("yyyyMMdd.HH", java.util.TimeZone.getTimeZone("GMT+8")).format(java.util.Date())
+fun versionNameDate(): String {
+    val fmt = SimpleDateFormat("yyyyMMdd.HH").apply { timeZone = TimeZone.getTimeZone("GMT+8") }
+    return fmt.format(Date())
+}
 
 android {
-    compileSdk = 36
+    compileSdk = 37
     namespace = "com.yuyan"
     defaultConfig {
         applicationId = "com.yuyan.pinyin"
         minSdk = 23
-        targetSdk = 36
+        targetSdk = 37
         versionCode = versionCodeDate().toInt()
         versionName = versionNameDate()
 
@@ -44,7 +53,7 @@ android {
     signingConfigs {
         create("release") {
             val keystorePropertiesFile = rootProject.file("keystore/keystore.properties")
-            val keystoreProperties = java.util.Properties().apply {
+            val keystoreProperties = Properties().apply {
                 if (keystorePropertiesFile.exists()) {
                     keystorePropertiesFile.inputStream().use { load(it) }
                 }
@@ -94,10 +103,8 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    applicationVariants.configureEach {
-        outputs.configureEach {
-            outputFileName = "yuyanIme_${versionCodeDate()}_${this@configureEach.buildType.name}.apk"
-        }
+    kotlinOptions {
+        jvmTarget = "17"
     }
 }
 
